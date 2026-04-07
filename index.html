@@ -7,7 +7,6 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover"
     />
     <title>SHRAMZDB2026</title>
-    <!-- Import Google Fonts - hanya 1 font untuk performance -->
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
@@ -30,14 +29,11 @@
         overflow: hidden;
         font-family: "Poppins", sans-serif;
         /* ========== ⭐⭐⭐ TUAN: TUKAR BACKGROUND DI SINI ⭐⭐⭐ ========== */
-        /* GANTI 'BACKGROUND/wallpaper-anda.jpg' dengan nama fail wallpaper anda */
-        /* Pastikan saiz gambar tidak terlalu besar untuk elak lag */
         background-image: url("Wallpaper/BACKGROUND.JPG");
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
         background-attachment: fixed;
-        /* ========== AKHIR BAHAGIAN TUAN ========== */
         color: #f9e7c2;
       }
 
@@ -143,11 +139,6 @@
         transform: scale(0.97);
       }
 
-      .claim-btn {
-        background: radial-gradient(circle at 30% 10%, #ff6a3d, #c73c0e);
-        color: #fff6e5;
-      }
-
       .surat-container {
         margin-top: clamp(8px, 3vw, 15px);
         transition: all 0.3s ease;
@@ -157,30 +148,27 @@
       }
 
       .surat-container.open {
-        max-height: 450px;
+        max-height: 500px; /* Dinaikkan sedikit untuk muatkan gambar */
         opacity: 1;
         margin-bottom: clamp(8px, 3vw, 15px);
       }
 
       .surat-card {
         background: rgba(255, 245, 215, 0.95);
-        border-radius: clamp(24px, 5vw, 32px);
-        padding: clamp(12px, 3vw, 16px);
+        border-radius: clamp(20px, 5vw, 24px);
+        padding: 10px;
         color: #3e2a1f;
         text-align: center;
         border: 1px solid #ffd58c;
       }
 
-      .surat-card p {
-        font-size: clamp(0.8rem, 3vw, 0.95rem);
-        margin: 6px 0;
-        line-height: 1.4;
-      }
-
-      .signature {
-        margin-top: 8px;
-        font-style: italic;
-        font-weight: bold;
+      /* CSS Baru untuk gambar di dalam kad */
+      .surat-card img {
+        width: 100%;
+        height: auto;
+        border-radius: clamp(12px, 4vw, 16px);
+        display: block;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       }
 
       #bg-music {
@@ -249,16 +237,12 @@
     <div id="canvas-container"></div>
     <canvas id="fireworks-canvas"></canvas>
 
-    <!-- ========== ⭐⭐⭐ TUAN: TUKAR LAGU DI SINI ⭐⭐⭐ ========== -->
-    <!-- GANTI 'MUSIC/lagu-raya.mp3' dengan nama fail lagu anda -->
-    <!-- PASTIKAN FAIL MP3 SAiz KECIK (<2MB) UNTUK ELAK LAG -->
     <audio id="bg-music" loop preload="none">
       <source
         src="Music/Faizal Tahir, Zizi Kirana & Darmas - Ceria Aidilfitri.mp3"
         type="audio/mpeg"
       />
     </audio>
-    <!-- ========== AKHIR BAHAGIAN TUAN ========== -->
 
     <div class="ui-overlay">
       <div class="raya-board" id="rayaBoard">
@@ -269,29 +253,13 @@
           Semoga Aidilfitri ini membawa sinar kebahagiaan.
         </div>
 
-        <button class="btn-raya" id="openSuratBtn">📜 Buka Surat</button>
+        <button class="btn-raya" id="openSuratBtn">🖼️ Buka Gambar</button>
 
         <div id="suratWrapper" class="surat-container">
           <div class="surat-card">
-            <p>✨✉️✨</p>
-            <p><strong>Assalamualaikum & Salam Aidilfitri 2026</strong></p>
-            <p>
-              Selamat Hari Raya Aidilfitri, Maaf Zahir Dan Batin. Di Hari Yang
-              Mulia ini, Saya Menyusun Sepuluh Jari Memohon Kemaafan Andai Ada
-              Kata Dan Tingkah Laku Saya Yang Mengguris Hati Dan Perasaan.
-            </p>
-            <p>
-              Di Hari Yang Mulia Ini Juga Saya Mendoakan Semoga Dipermudahkan
-              Segala Urusan Dan Diberi Keampunan Setelah Sebulan Kita Berpuasa,
-            </p>
-            <p>🌟 Selamat Hari Raya Aidilfitri 🌟</p>
-            <p class="signature">- Keluarga, Sahabat Handai & Rakan Taulan -</p>
+            <img src="GAMBAR/gambar-anda.jpg" alt="Gambar Raya" />
           </div>
         </div>
-
-        <button class="btn-raya claim-btn" id="claimDuitBtn">
-          🧧 DUIT RAYA
-        </button>
 
         <div class="footer-note">✨ JOHNNY BRAULIO @ 2026 ✨</div>
       </div>
@@ -311,8 +279,6 @@
       // ============================================
       // THREE.JS - VERSION SANGAT RINGAN UNTUK ALL DEVICES
       // ============================================
-
-      // Detect mobile untuk kurangkan particle
       const isMobile =
         window.innerWidth < 768 ||
         /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -322,17 +288,10 @@
       const container = document.getElementById("canvas-container");
       const scene = new THREE.Scene();
 
-      // ========== ⭐⭐⭐ TUAN: TUKAR WALLPAPER UNTUK 3D BACKGROUND ⭐⭐⭐ ==========
-      // GANTI 'BACKGROUND/wallpaper-anda.jpg' dengan nama fail wallpaper anda
-      // Untuk performance terbaik, guna gambar JPG dengan saiz <500KB
       const textureLoader = new THREE.TextureLoader();
       const bgTexture = textureLoader.load("Wallpaper/BACKGROUND.JPG");
       scene.background = bgTexture;
-      // Jika mahu warna biasa, comment baris di atas dan uncomment:
-      // scene.background = new THREE.Color(0x0a0f1a);
-      // ========== AKHIR BAHAGIAN TUAN ==========
 
-      // Kurang fog untuk performance
       scene.fog = isMobile ? null : new THREE.FogExp2(0x0a0f1a, 0.005);
 
       const camera = new THREE.PerspectiveCamera(
@@ -350,17 +309,16 @@
         powerPreference: "high-performance",
       });
       renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5)); // Limit untuk performance
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
       container.appendChild(renderer.domElement);
 
-      // Lighting - minimal
       const ambientLight = new THREE.AmbientLight(0x404060);
       scene.add(ambientLight);
       const dirLight = new THREE.DirectionalLight(0xfff5d1, 0.8);
       dirLight.position.set(3, 5, 4);
       scene.add(dirLight);
 
-      // 3D Ketupat - simple geometry
+      // 3D Ketupat
       const ketupatGroup = new THREE.Group();
       const diamondGeo = new THREE.ConeGeometry(0.7, 1.2, 6);
       const diamondMat = new THREE.MeshStandardMaterial({
@@ -383,7 +341,7 @@
       ketupatGroup.add(band);
       scene.add(ketupatGroup);
 
-      // Particle system - dikurangkan untuk mobile
+      // Particle system
       const particleCount = isMobile ? 150 : 350;
       const particlesGeometry = new THREE.BufferGeometry();
       const particlePositions = new Float32Array(particleCount * 3);
@@ -404,7 +362,7 @@
       const particleSystem = new THREE.Points(particlesGeometry, particlesMat);
       scene.add(particleSystem);
 
-      // Stars - ringan
+      // Stars
       const starCount = isMobile ? 400 : 800;
       const starFieldGeo = new THREE.BufferGeometry();
       const starPos = [];
@@ -425,13 +383,11 @@
       const starsBg = new THREE.Points(starFieldGeo, starMat);
       scene.add(starsBg);
 
-      // Animation loop - ringan
       let time = 0;
       function animate3D() {
         requestAnimationFrame(animate3D);
         time += 0.01;
 
-        // Simple rotation
         ketupatGroup.rotation.y = Math.sin(time * 0.4) * 0.3;
         ketupatGroup.rotation.x = Math.sin(time * 0.6) * 0.15;
         ketupatGroup.position.y = Math.sin(time * 0.8) * 0.05;
@@ -450,13 +406,12 @@
       });
 
       // ============================================
-      // FIREWORKS - VERSION RINGAN UNTUK MOBILE
+      // FIREWORKS
       // ============================================
       const fireCanvas = document.getElementById("fireworks-canvas");
       const ctx = fireCanvas.getContext("2d");
       let fireworks = [];
       let particles = [];
-      let lastFrame = 0;
 
       function resizeFireCanvas() {
         fireCanvas.width = window.innerWidth;
@@ -562,13 +517,6 @@
         fireworks.push(new Firework(startX, startY, randX, randY));
       }
 
-      function burstFireworks(count) {
-        const burstCount = Math.min(count, isMobile ? 5 : 8);
-        for (let i = 0; i < burstCount; i++) {
-          setTimeout(() => launchRandomFirework(), i * 60);
-        }
-      }
-
       function fireworkLoop() {
         updateFireworks();
         drawFireworks();
@@ -576,18 +524,16 @@
       }
       fireworkLoop();
 
-      // Kurang frequency untuk mobile
       setInterval(() => {
         if (Math.random() > 0.75) launchRandomFirework();
       }, 4000);
 
       // ============================================
-      // DOM INTERACTIONS - RINGAN & RESPONSIF
+      // DOM INTERACTIONS
       // ============================================
       const music = document.getElementById("bg-music");
       music.volume = 0.25;
 
-      // Audio play on first interaction sahaja
       let audioStarted = false;
       function startAudio() {
         if (!audioStarted) {
@@ -599,47 +545,26 @@
       document.body.addEventListener("click", startAudio, { once: true });
       document.body.addEventListener("touchstart", startAudio, { once: true });
 
-      // ========== ⭐⭐⭐ TUAN: TUKAR GIF DI SINI ⭐⭐⭐ ==========
-      // GANTI 'GIF/raya-animation.gif' dengan nama fail GIF anda
-      // PASTIKAN SAIZ GIF KECIK (<1MB) UNTUK ELAK LAG
       const gifDiv = document.getElementById("customGif");
       gifDiv.style.backgroundImage = "url('GIF/DUITRAYA.gif')";
       gifDiv.style.backgroundSize = "cover";
       gifDiv.style.backgroundPosition = "center";
-      // ========== AKHIR BAHAGIAN TUAN ==========
 
+      // Fungsi Baru: Tunjuk/Sembunyi Gambar
       const openBtn = document.getElementById("openSuratBtn");
       const suratWrap = document.getElementById("suratWrapper");
       openBtn.addEventListener("click", (e) => {
         e.preventDefault();
         suratWrap.classList.toggle("open");
+        
+        // Tukar teks butang mengikut status (buka/tutup)
         openBtn.innerHTML = suratWrap.classList.contains("open")
-          ? "📖 Tutup Surat"
-          : "📜 Buka Surat";
+          ? "🖼️ Tutup Gambar"
+          : "🖼️ Buka Gambar";
+          
         launchRandomFirework();
       });
 
-      const claimBtn = document.getElementById("claimDuitBtn");
-      const ucapanEl = document.getElementById("ucapanText");
-      let resetTimer;
-
-      claimBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        ucapanEl.innerHTML =
-          "DUIT RAYA TIADA SEBAB KRISIS TIMUR TENGAH HEHEHE <br>🎉 Selamat Hari Raya! 🎉";
-        burstFireworks(6);
-
-        if (resetTimer) clearTimeout(resetTimer);
-        resetTimer = setTimeout(() => {
-          ucapanEl.innerHTML =
-            "🌙 Maaf Zahir & Batin 🌙<br>Semoga Aidilfitri ini membawa sinar kebahagiaan.";
-        }, 4000);
-
-        // Haptic feedback jika support (iOS/Android)
-        if (navigator.vibrate) navigator.vibrate(50);
-      });
-
-      console.log("✅ Kad Raya Ringan | Compatible All Devices | No Lag");
     </script>
   </body>
 </html>
